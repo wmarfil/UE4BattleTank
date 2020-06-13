@@ -2,6 +2,7 @@
 
 #include "Math/UnrealMathUtility.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 #include "BaseTankPlayerController.h"
 
 
@@ -40,11 +41,12 @@ void ABaseTankPlayerController::AimTowardCrosshair()
     if(GetSightRayHitLocation(OutHitLocation))
     {
         //UE_LOG(LogTemp, Warning, TEXT("    Look Location: %s"), *OutHitLocation.ToString());
+        auto ControlledTank = GetControlledTank();
+        if (ControlledTank)
+        {
+            ControlledTank->AimAt(OutHitLocation);
+        }
     }
-    
-
-
-    // TODO: If it hits the landscpae , tell controlled tank to aim at this point.
 }
 
 // Get world location of linetrace through crosshair
@@ -61,11 +63,10 @@ bool ABaseTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) 
     FVector OutLookDirection; 
     if (GetLookDirection(ScreenLocation, OutLookDirection))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Deprojection on landscape direction result: %s"), *OutLookDirection.ToString());
+        // UE_LOG(LogTemp, Warning, TEXT("Deprojection on landscape direction result: %s"), *OutLookDirection.ToString());
         // Line-trace along (Raycast) that look direction (set a max range)
-        FVector HitLocation;
-        bool res = GetLookVectorHitLocation(OutLookDirection, HitLocation);
-        UE_LOG(LogTemp, Warning, TEXT("Raycast HitLocation : %s"), *HitLocation.ToString());
+        bool res = GetLookVectorHitLocation(OutLookDirection, OutHitLocation);
+        //UE_LOG(LogTemp, Warning, TEXT("Raycast HitLocation : %s"), *HitLocation.ToString());
         return res;
     }
 
@@ -75,6 +76,7 @@ bool ABaseTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) 
 bool ABaseTankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
 {
     FVector OutCameraHitLocation;
+
     return DeprojectScreenPositionToWorld(
         ScreenLocation.X,
         ScreenLocation.Y,
@@ -95,7 +97,17 @@ bool ABaseTankPlayerController::GetLookVectorHitLocation(FVector LookDirection, 
     // FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
     // FCollisionResponseParams CollisionResponseParams;
 
-    // ECollisionChannel::ECC_PhysicsBody
+    // DrawDebugLine(
+	// 	GetWorld(),
+	// 	Start,
+	// 	End,
+	// 	FColor(255, 0, 0),
+	// 	false,
+	// 	0.f,
+	// 	0,
+	// 	5.f
+	// );
+
     if(GetWorld()->LineTraceSingleByChannel(
             HitResult,
             Start,

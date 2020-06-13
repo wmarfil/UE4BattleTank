@@ -17,23 +17,33 @@ void ATankAIController::BeginPlay()
     // else
     // {
     //     UE_LOG(LogTemp, Warning, TEXT("Tank Controlled by AI ?: %s"), *ControlledTank->GetName());
-    // }
-
-    auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-    if (PlayerTank)
-    {
-        //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Error, TEXT("PlayerController Pawn not found..."));
-    }
+    // }    
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
     //UE_LOG(LogTemp, Warning, TEXT("Ticking AI"));
+
+    auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+    if (PlayerTank)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
+        
+        // TODO: Move toward the player
+        
+        // Aim toward the player.
+        auto ControlledTank = GetControlledTank();
+        if (ControlledTank)
+        {
+            ControlledTank->AimAt(PlayerTank->GetActorLocation());
+        }
+        
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("PlayerController Pawn not found..."));
+    }
 }
 
 ATank* ATankAIController::GetControlledTank() const
