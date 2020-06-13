@@ -7,7 +7,7 @@
 void ATankAIController::BeginPlay()
 {
     Super::BeginPlay();
-    UE_LOG(LogTemp, Warning, TEXT("In ATankAIController::BeginPlay"));
+    //UE_LOG(LogTemp, Warning, TEXT("In ATankAIController::BeginPlay"));
     
     // auto ControlledTank = GetControlledTank();
     // if (!ControlledTank)
@@ -22,7 +22,7 @@ void ATankAIController::BeginPlay()
     auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
     if (PlayerTank)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
+        //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
     }
     else
     {
