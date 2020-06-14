@@ -49,4 +49,8 @@ private:
 	// If we just pust UClass* insead of TSubClass we would have a too big class list in BP UI.
 
 	UTankBarrel* Barrel = nullptr;
+
+	
+	float ReloadTime = 3.f;
+	double LastFireTime = 0;
 };

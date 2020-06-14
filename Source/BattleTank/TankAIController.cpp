@@ -26,7 +26,7 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
     //UE_LOG(LogTemp, Warning, TEXT("Ticking AI"));
 
-    auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+    auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
     if (PlayerTank)
     {
         //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
@@ -34,10 +34,11 @@ void ATankAIController::Tick(float DeltaTime)
         // TODO: Move toward the player
         
         // Aim toward the player.
-        auto ControlledTank = GetControlledTank();
+        auto ControlledTank = Cast<ATank>(GetPawn());
         if (ControlledTank)
         {
             ControlledTank->AimAt(PlayerTank->GetActorLocation());
+            ControlledTank->Fire(); // TODO limit framerate stuff
         }
         
     }
@@ -45,11 +46,4 @@ void ATankAIController::Tick(float DeltaTime)
     {
         UE_LOG(LogTemp, Error, TEXT("PlayerController Pawn not found..."));
     }
-}
-
-ATank* ATankAIController::GetControlledTank() const
-{
-    UE_LOG(LogTemp, Warning, TEXT("In ATankAIController::GetControlledTank"));
-    return Cast<ATank>(GetPawn());
-
 }
