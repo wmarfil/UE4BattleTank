@@ -25,8 +25,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Fire();
+
 	UPROPERTY(EditAnywhere, Category = "Firing")
-	float LaunchSpeed = 10000.f; // 1000 m/s
+	float LaunchSpeed = 4000.f;
+	//float LaunchSpeed = 10000.f; // 1000 m/s
 
 protected:
 	// TIP: Forward declare the properties/ function of the header file, and include them in the cpp file.

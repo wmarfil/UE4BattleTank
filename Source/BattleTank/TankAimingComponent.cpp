@@ -71,14 +71,14 @@ void UTankAimingComponent::LaunchProjectile(FVector HitLocation, FVector &OutAim
 	if (bHaveAimSolution)
 	{
 		OutAimDirection = OutLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> Aim solution Found !"), GetWorld()->GetTimeSeconds());
+		//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> Aim solution Found !"), GetWorld()->GetTimeSeconds());
 		MoveBarrelToward(OutAimDirection);
 		MoveTurretToward(OutAimDirection);
 	}
 	else
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("%s ======> NO AIM SOLUTION"), *GetOwner()->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
+		//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
 	}
 }
 
@@ -100,10 +100,10 @@ void UTankAimingComponent::MoveTurretToward(FVector AimDirection)
 	// Work out difference between current turret rotation and aim direction,
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
-	UE_LOG(LogTemp, Warning, TEXT("Turret TurretRotator (fw v.): %s"), *TurretRotator.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("Turret AimAsRotator: %s"), *AimAsRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Turret TurretRotator (fw v.): %s"), *TurretRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Turret AimAsRotator: %s"), *AimAsRotator.ToString());
 	auto DeltaRotator = AimAsRotator - TurretRotator;
-	UE_LOG(LogTemp, Warning, TEXT("Turret DeltaRotator: %s"), *DeltaRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Turret DeltaRotator: %s"), *DeltaRotator.ToString());
 	Turret->MutateAzimuth(DeltaRotator.Yaw);
 }
 
@@ -117,8 +117,21 @@ void UTankAimingComponent::SetTurretReference(UTankTurret *TurretToSet)
 	Turret = TurretToSet;
 }
 
-// was in movebarreltoward method:
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// was in movebarreltoward method:
 // DrawDebugLine(
 // 	GetWorld(),
 // 	Barrel->GetSocketLocation(FName("Projectile")),
@@ -129,7 +142,6 @@ void UTankAimingComponent::SetTurretReference(UTankTurret *TurretToSet)
 // 	0,
 // 	15.f
 // );
-
 // DrawDebugLine(
 // 	GetWorld(),
 // 	Barrel->GetComponentLocation(),
