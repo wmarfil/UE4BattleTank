@@ -50,7 +50,9 @@ private:
 
 	UTankBarrel* Barrel = nullptr;
 
-	
+	// EditDefaultsOnly doesnt let instance modify occur, only through BP!
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3.f;
+
 	double LastFireTime = 0;
 };
