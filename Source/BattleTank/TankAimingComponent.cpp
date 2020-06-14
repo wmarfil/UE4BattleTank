@@ -91,14 +91,11 @@ void UTankAimingComponent::MoveBarrelToward(FVector AimDirection)
 	// work out difference between current barrel rotation and aim direction, 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
+	UE_LOG(LogTemp, Warning, TEXT("BarrelRotator (fw v.): %s"), *BarrelRotator.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString());
-	// Remove hard coded.
-	Barrel->Elevate(5);
-	// Move the barrel the rigt amount this frame
-	
-	// Given a max elevation speed and the frame time.
-
-
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	UE_LOG(LogTemp, Warning, TEXT("DeltaRotator: %s"), *DeltaRotator.ToString());
+	Barrel->Elevate( DeltaRotator.Pitch);
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)

@@ -7,7 +7,8 @@
 #include "TankBarrel.generated.h"
 
 /**
- * 
+ * Note that once you should compile then create new component extended from this C++ class to not have unpredictable shit going on like
+ * static mesh of the extended BP clearing itself, the BP resetting and stuff and random crash probably. 
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), hidecategories = ("Collision"))
 class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
@@ -19,7 +20,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Setup")
-	float MaxDegreesPerSecondes = 20.f;
+	float MaxDegreesPerSecondes = 5.f;
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float MaxElevation = 40.f;
 	UPROPERTY(EditAnywhere, Category = "Setup")
