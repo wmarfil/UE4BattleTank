@@ -50,5 +50,7 @@ void ATank::Fire()
 
 	auto LocationToSpawn = Barrel->GetSocketLocation(FName("Projectile"));
 	auto RotationToSpawn = Barrel->GetSocketRotation(FName("Projectile"));
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, LocationToSpawn, RotationToSpawn);
+	auto ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, LocationToSpawn, RotationToSpawn);
+	
+	ProjectileInstance->LaunchProjectile(LaunchSpeed);
 }

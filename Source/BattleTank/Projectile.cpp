@@ -10,6 +10,7 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement Component"));
 	ProjectileMovementComponent->bAutoActivate = false;
+	//UE_LOG(LogTemp, Error, TEXT("544555555555555555555555555555555555555555"));
 }
 
 // Called when the game starts or when spawned
@@ -25,3 +26,9 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AProjectile::LaunchProjectile(float Speed)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%f: Tank fires with speed %f"), GetWorld()->GetTimeSeconds(), Speed);
+	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
+	ProjectileMovementComponent->Activate();
+}
