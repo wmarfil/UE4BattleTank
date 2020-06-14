@@ -8,6 +8,7 @@
 
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -20,17 +21,17 @@ public:
 
 	void AimAt(FVector HitLocation);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetTurretReference(UTankTurret* TurretToSet);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
 	UPROPERTY(EditAnywhere, Category = "Firing")
 	float LaunchSpeed = 4000.f;
-	//float LaunchSpeed = 10000.f; // 1000 m/s
+	//float LaunchSpeed = 10000.f; // 1000 m/s A CONFIRMER
 
 protected:
 	// TIP: Forward declare the properties/ function of the header file, and include them in the cpp file.
@@ -43,7 +44,9 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	
-	
-	
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	TSubclassOf<AProjectile> ProjectileBlueprint; // Doc: https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/TSubclassOf/index.html
+	// If we just pust UClass* insead of TSubClass we would have a too big class list in BP UI.
+
+	UTankBarrel* Barrel = nullptr;
 };

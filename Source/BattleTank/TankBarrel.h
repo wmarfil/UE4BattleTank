@@ -10,7 +10,7 @@
  * Note that once you should compile then create new component extended from this C++ class to not have unpredictable shit going on like
  * static mesh of the extended BP clearing itself, the BP resetting and stuff and random crash probably. 
  */
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), hidecategories = ("Collision"))
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 {
 	GENERATED_BODY()
