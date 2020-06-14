@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"
 #include "Tank.generated.h"
 
 UCLASS()
@@ -25,7 +24,8 @@ public:
 	float LaunchSpeed = 10000.f; // 1000 m/s
 
 protected:
-	UTankAimingComponent* TankAimingComponent = nullptr;
+	// TIP: Forward declare the properties/ function of the header file, and include them in the cpp file.
+	class UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:	
 	// Called when the game starts or when spawned
