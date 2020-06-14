@@ -67,17 +67,22 @@ void UTankAimingComponent::LaunchProjectile(FVector HitLocation, FVector& OutAim
 		StartLocation,
 		HitLocation,
 		ProjectileLaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 	if(bHaveAimSolution)
 	{
 		OutAimDirection = OutLaunchVelocity.GetSafeNormal();
-		// UE_LOG(LogTemp, Warning, TEXT("%s ======> Aim Direction out of solution  %s"), *GetOwner()->GetName() , *AimDirection.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> Aim solution Found !"), GetWorld()->GetTimeSeconds());
 		MoveBarrelToward(OutAimDirection);
 	}
 	else
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("%s ======> NO AIM SOLUTION"), *GetOwner()->GetName());
+    	UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
+
 	}
 }
 

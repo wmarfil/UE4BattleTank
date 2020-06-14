@@ -3,6 +3,8 @@
 #include "Math/UnrealMathUtility.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "GameFramework/Pawn.h"
+#include "Tank.h"
 #include "BaseTankPlayerController.h"
 
 
