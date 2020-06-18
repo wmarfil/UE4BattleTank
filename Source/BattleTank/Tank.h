@@ -9,6 +9,8 @@
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
+class UTankAimingComponent;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -35,7 +37,10 @@ public:
 
 protected:
 	// TIP: Forward declare the properties/ function of the header file, and include them in the cpp file.
-	class UTankAimingComponent* TankAimingComponent = nullptr;
+	UTankAimingComponent* TankAimingComponent = nullptr;
+	// Useless now that we make it manually addable in the component list rather than hard coded in the constructor of Tank like TankAimingComponent.
+	// UPROPERTY(BlueprintReadOnly, Category = "Setup")
+	// UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:	
 	// Called when the game starts or when spawned
