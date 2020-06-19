@@ -6,6 +6,7 @@
 #include "Tank.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 // TODO: Might not need to tick.
@@ -26,6 +27,23 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("No Barrel or Turret set for %s, soft code it with our function BP !"), *OurTankName);
+	}
+}
+
+void UTankAimingComponent::Fire()
+{
+	// FPlatform time feels like its hardware hard coded or some shit, cant cheat it.
+	auto bHasReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+	if (ensure(Barrel) && bHasReloaded)
+	{
+		// UE_LOG(LogTemp, Warning, TEXT("FIRING!!"));
+
+		auto LocationToSpawn = Barrel->GetSocketLocation(FName("Projectile"));
+		auto RotationToSpawn = Barrel->GetSocketRotation(FName("Projectile"));
+		auto ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, LocationToSpawn, RotationToSpawn);
+
+		ProjectileInstance->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
 	}
 }
 

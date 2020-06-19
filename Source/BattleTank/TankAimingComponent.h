@@ -9,38 +9,54 @@
 UENUM()
 enum class EFiringStatus : uint8
 {
-    Locked,
-    Aiming,
+	Locked,
+	Aiming,
 	Reloading
 };
 
-// Forward Declaration ! 
-class UTankBarrel; 
-class UTankTurret; 
+// Forward Declaration !
+class UTankBarrel;
+class UTankTurret;
+class AProjectile;
 
 // Holds barrel's properties and Elevate method.(this is a tooltip test)
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-public:	
+	UFUNCTION(BlueprintCallable, Category = "Firing") // TODO: maybe protected actually is better
+	void Fire();
+
 	void AimAt(FVector HitLocation);
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+	void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	EFiringStatus FiringStatus = EFiringStatus::Aiming;
 
 private:
-	UTankBarrel* Barrel = nullptr;
-	UTankTurret* Turret = nullptr;
-	void LaunchProjectile(FVector HitLocation, FVector& OutAimDirection);
+	UTankBarrel *Barrel = nullptr;
+	UTankTurret *Turret = nullptr;
+
 	void MoveBarrelToward(FVector AimDirection);
 	void MoveTurretToward(FVector AimDirection);
+
+	// EditDefaultsOnly doesnt let instance modify occur, only through BP!
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTime = 3.f;
+	double LastFireTime = 0;
+
+	// If we just pust UClass* insead of TSubClass we would have a too big class list in BP UI.
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	TSubclassOf<AProjectile> ProjectileBlueprint; // Doc: https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/TSubclassOf/index.html
+	void LaunchProjectile(FVector HitLocation, FVector &OutAimDirection);
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	float LaunchSpeed = 4000.f;
+	//float LaunchSpeed = 10000.f; // 1000 m/s A CONFIRMER
 };
