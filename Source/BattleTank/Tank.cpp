@@ -12,6 +12,7 @@
 // Sets default values
 ATank::ATank()
 {
+	// UE_LOG(LogTemp, Warning, TEXT("brobro: %s : TANK Ctor"), *GetName());
 	PrimaryActorTick.bCanEverTick = false;	
 	// Old:
 	// TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
@@ -22,11 +23,13 @@ ATank::ATank()
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();
+	// UE_LOG(LogTemp, Warning, TEXT("brobro: %s : TANK BeginPlay"), *GetName());
+	Super::BeginPlay(); // Very much needed for the Tank BP to launch its own BeginPlay in Eventgraph !!!! 
 }
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if(!TankAimingComponent) {return;}
 	TankAimingComponent->AimAt(HitLocation);
 }
 

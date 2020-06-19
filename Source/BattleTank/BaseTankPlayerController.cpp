@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.h"
 #include "BaseTankPlayerController.h"
+#include "TankAimingComponent.h"
 
 
 void ABaseTankPlayerController::BeginPlay()
@@ -20,6 +21,8 @@ void ABaseTankPlayerController::BeginPlay()
     else
     {
         //UE_LOG(LogTemp, Warning, TEXT("Tank Controlled by player?: %s"), *ControlledTank->GetName());
+        auto AimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+        FoundAimingComponent(AimingComp);
     }
 }
 
