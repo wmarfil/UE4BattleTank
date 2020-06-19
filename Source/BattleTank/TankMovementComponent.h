@@ -6,7 +6,7 @@
 #include "GameFramework/NavMovementComponent.h"
 #include "TankMovementComponent.generated.h"
 
-// NOTE: To compare this to the AimingCOmponent, since we started coding it the same way, we will now get the references of the tank component (tracks here) 
+// NOTE: To compare this to the AimingComponent, since we started coding it the same way, we will now get the references of the tank component (tracks here) 
 // directly by the a method Initialize.
 
 class UTankTrack;
@@ -27,7 +27,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendTurnRight(float Throw);
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
-
 
 private:
 	UTankTrack* TrackRight = nullptr;

@@ -28,21 +28,16 @@ void ATankAIController::Tick(float DeltaTime)
     //UE_LOG(LogTemp, Warning, TEXT("Ticking AI"));
 
     auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-    if (ensure(PlayerTank))
+    auto ControlledTank = Cast<ATank>(GetPawn());
+    if (ensure(PlayerTank && ControlledTank))
     {
-        //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
-
-        auto ControlledTank = Cast<ATank>(GetPawn());
-        if (ensure(ControlledTank))
+        auto AimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+        if (ensure(AimingComp))
         {
-            auto AimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
-            if (ensure(AimingComp))
-            {
-                AimingComp->AimAt(PlayerTank->GetActorLocation());
-                AimingComp->Fire();
-            }
-            MoveToActor(PlayerTank, AcceptanceRadius);
+            AimingComp->AimAt(PlayerTank->GetActorLocation());
+            AimingComp->Fire();
         }
+        MoveToActor(PlayerTank, AcceptanceRadius);
     }
     else
     {

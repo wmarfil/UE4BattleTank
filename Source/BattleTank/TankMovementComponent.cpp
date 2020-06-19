@@ -8,7 +8,6 @@
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrack, UTankTrack* RightTrack)
 {
     // UE_LOG(LogTemp, Warning, TEXT(" Initialize Tank Movement Component"));
-    if(!ensure(TrackLeft && TrackRight)){ return;}
     TrackLeft = LeftTrack;
     TrackRight = RightTrack;
 }
