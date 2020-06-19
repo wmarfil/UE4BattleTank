@@ -37,6 +37,8 @@ public:
 
 protected:
 	// TIP: Forward declare the properties/ function of the header file, and include them in the cpp file.
+	// BlueprintReadOnly needed to be accessed in BaseTankPlayerController BP to get passed to the UI Player widget (which will set the color of the aiming comp).
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	// Useless now that we make it manually addable in the component list rather than hard coded in the constructor of Tank like TankAimingComponent.
 	// UPROPERTY(BlueprintReadOnly, Category = "Setup")

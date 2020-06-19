@@ -30,26 +30,28 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
     TrackRight->SetThrottle(-Throw);
 }
 
-// Used by the AI.
+// Called by the pathfinding (engine logic) when ATankAIController::MoveToActor() is called
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
     // No need to call Super.
     auto Tank = GetOwner();
     auto ForwardVectorUnit = Tank->GetActorForwardVector().GetSafeNormal();
     auto MoveVelocityUnit = MoveVelocity.GetSafeNormal();
-    auto DotProduct = FVector::DotProduct(ForwardVectorUnit, MoveVelocityUnit);
-    UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s with forward vector of %s ===> dot product is %f"), 
+    
+    auto DotProduct = FVector::DotProduct(ForwardVectorUnit, MoveVelocityUnit);  
+    IntendMoveFoward(DotProduct);
+
+    auto CrossProduct = FVector::CrossProduct(ForwardVectorUnit, MoveVelocityUnit);  
+    IntendTurnRight(CrossProduct.Z);
+
+
+    UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s with forward vector of %s ===> DOT product is %f, CROSS Product Z: %f"), 
         *Tank->GetName(),
         *MoveVelocityUnit.ToString(),
         *ForwardVectorUnit.ToString(),
-        DotProduct 
+        DotProduct,
+        CrossProduct.Z    
     );
-    
-    // if(DotProduct < 0.9f){
-    //     IntendTurnRight(DotProduct);
-    // }else{
-        IntendMoveFoward(DotProduct);
-    // }
 }
 
 
