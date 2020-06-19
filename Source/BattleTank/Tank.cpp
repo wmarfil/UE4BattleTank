@@ -29,7 +29,8 @@ void ATank::BeginPlay()
 
 void ATank::AimAt(FVector HitLocation)
 {
-	if(!TankAimingComponent) {return;}
+	// ensure is an assertion which display special log for us when ptr is NULL. Handy.
+	if(!ensure(TankAimingComponent)) {UE_LOG(LogTemp, Error, TEXT("OOOOH"));return;}
 	TankAimingComponent->AimAt(HitLocation);
 }
 
@@ -42,7 +43,7 @@ void ATank::Fire()
 {
 	// FPlatform time feels like its hardware hard coded or some shit, cant cheat it.
 	auto bHasReloaded = ( FPlatformTime::Seconds() - LastFireTime ) > ReloadTime;
-	if(Barrel && bHasReloaded)
+	if(ensure(Barrel) && bHasReloaded)
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("FIRING!!"));
 
