@@ -4,10 +4,10 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/Actor.h" // findcomponentnbyclass
 #include "Tank.h"
 #include "BaseTankPlayerController.h"
 #include "TankAimingComponent.h"
-
 
 void ABaseTankPlayerController::BeginPlay()
 {
@@ -28,12 +28,12 @@ void ABaseTankPlayerController::BeginPlay()
 
 void ABaseTankPlayerController::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
     AimTowardCrosshair();
     //UE_LOG(LogTemp, Warning, TEXT("Ticking PLAYER"));
 }
 
-ATank* ABaseTankPlayerController::GetControlledTank() const
+ATank *ABaseTankPlayerController::GetControlledTank() const
 {
     //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::GetControlledTank"));
     return Cast<ATank>(GetPawn());
@@ -43,21 +43,21 @@ void ABaseTankPlayerController::AimTowardCrosshair()
 {
     //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::AimTowardCrosshair"));
     FVector OutHitLocation; // Out P.
-    if(GetSightRayHitLocation(OutHitLocation))
+    if (GetSightRayHitLocation(OutHitLocation))
     {
         //UE_LOG(LogTemp, Warning, TEXT("    Look Location: %s"), *OutHitLocation.ToString());
         auto ControlledTank = GetControlledTank();
-        if (ControlledTank)
+        if (ensure(ControlledTank && ControlledTank->FindComponentByClass<UTankAimingComponent>())
         {
-            ControlledTank->AimAt(OutHitLocation);
+            ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
         }
     }
 }
 
 // Get world location of linetrace through crosshair
-bool ABaseTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
+bool ABaseTankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) const
 {
-    OutHitLocation = FVector(1.f, 2.f ,3.f);
+    OutHitLocation = FVector(1.f, 2.f, 3.f);
     // Find the crosshair position. Do not make it dependant to the UI dot, it doesnt change very often therefore we can re decide where it is here.
     int32 ViewportSizeX, ViewportSizeY;
     GetViewportSize(ViewportSizeX, ViewportSizeY);
@@ -65,7 +65,7 @@ bool ABaseTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) 
     //UE_LOG(LogTemp, Warning, TEXT("viewport x: %d, viewport y: %d, vector2d result: %s"),ViewportSizeX, ViewportSizeY, *ScreenLocation.ToString());
 
     // "deproject" the screen position of the crosshair to a world position
-    FVector OutLookDirection; 
+    FVector OutLookDirection;
     if (GetLookDirection(ScreenLocation, OutLookDirection))
     {
         // UE_LOG(LogTemp, Warning, TEXT("Deprojection on landscape direction result: %s"), *OutLookDirection.ToString());
@@ -78,7 +78,7 @@ bool ABaseTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) 
     return false;
 }
 
-bool ABaseTankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
+bool ABaseTankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector &OutLookDirection) const
 {
     FVector OutCameraHitLocation;
 
@@ -86,40 +86,37 @@ bool ABaseTankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVect
         ScreenLocation.X,
         ScreenLocation.Y,
         OutCameraHitLocation,
-        OutLookDirection
-    );
+        OutLookDirection);
 }
 
 // The intereting part !
 bool ABaseTankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector &HitLocation) const
 {
     FHitResult HitResult;
-    
+
     FVector Start = PlayerCameraManager->GetCameraLocation();
     FVector End = Start + (LookDirection * LineTraceRange);
-    
+
     // No need for now, using default values.
     // FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
     // FCollisionResponseParams CollisionResponseParams;
 
     // DrawDebugLine(
-	// 	GetWorld(),
-	// 	Start,
-	// 	End,
-	// 	FColor(255, 0, 0),
-	// 	false,
-	// 	0.f,
-	// 	0,
-	// 	5.f
-	// );
+    // 	GetWorld(),
+    // 	Start,
+    // 	End,
+    // 	FColor(255, 0, 0),
+    // 	false,
+    // 	0.f,
+    // 	0,
+    // 	5.f
+    // );
 
-    if(GetWorld()->LineTraceSingleByChannel(
+    if (GetWorld()->LineTraceSingleByChannel(
             HitResult,
             Start,
             End,
-            ECollisionChannel::ECC_Visibility
-        )
-    )
+            ECollisionChannel::ECC_Visibility))
     {
         HitLocation = HitResult.Location;
         return true;
@@ -130,4 +127,3 @@ bool ABaseTankPlayerController::GetLookVectorHitLocation(FVector LookDirection, 
         return false;
     }
 }
-
