@@ -31,16 +31,13 @@ void ATankAIController::Tick(float DeltaTime)
     {
         //UE_LOG(LogTemp, Warning, TEXT("Player pawn found : %s"), *PlayerTank->GetName());
         
-        // TODO: Move toward the player
-        
-        // Aim toward the player.
         auto ControlledTank = Cast<ATank>(GetPawn());
         if (ControlledTank)
         {
             ControlledTank->AimAt(PlayerTank->GetActorLocation());
-            ControlledTank->Fire(); // TODO limit framerate stuff
+            ControlledTank->Fire();
+            MoveToActor(PlayerTank, AcceptanceRadius);
         }
-        
     }
     else
     {

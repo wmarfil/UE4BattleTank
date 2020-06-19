@@ -52,7 +52,7 @@ void ATank::Fire()
 	auto bHasReloaded = ( FPlatformTime::Seconds() - LastFireTime ) > ReloadTime;
 	if(Barrel && bHasReloaded)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FIRING!!"));
+		// UE_LOG(LogTemp, Warning, TEXT("FIRING!!"));
 
 		auto LocationToSpawn = Barrel->GetSocketLocation(FName("Projectile"));
 		auto RotationToSpawn = Barrel->GetSocketRotation(FName("Projectile"));
