@@ -39,9 +39,8 @@ void ATankAIController::Tick(float DeltaTime)
             if (ensure(AimingComp))
             {
                 AimingComp->AimAt(PlayerTank->GetActorLocation());
+                AimingComp->Fire();
             }
-            // TODO: Move Fire Logic to aiming comp !
-            ControlledTank->Fire();
             MoveToActor(PlayerTank, AcceptanceRadius);
         }
     }

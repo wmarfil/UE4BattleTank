@@ -47,7 +47,7 @@ void ABaseTankPlayerController::AimTowardCrosshair()
     {
         //UE_LOG(LogTemp, Warning, TEXT("    Look Location: %s"), *OutHitLocation.ToString());
         auto ControlledTank = GetControlledTank();
-        if (ensure(ControlledTank && ControlledTank->FindComponentByClass<UTankAimingComponent>())
+        if (ensure(ControlledTank && ControlledTank->FindComponentByClass<UTankAimingComponent>()))
         {
             ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
         }
