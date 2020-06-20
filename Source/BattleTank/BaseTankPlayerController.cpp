@@ -5,7 +5,6 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Actor.h" // findcomponentnbyclass
-#include "Tank.h"
 #include "BaseTankPlayerController.h"
 #include "TankAimingComponent.h"
 
@@ -13,15 +12,14 @@ void ABaseTankPlayerController::BeginPlay()
 {
     Super::BeginPlay();
     //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::BeginPlay"));
-    auto ControlledTank = GetControlledTank();
-    if (!ControlledTank)
+    auto TankPawn = GetPawn();
+    if (!TankPawn)
     {
         UE_LOG(LogTemp, Error, TEXT("Player Controller not possessing a tank..."));
     }
     else
     {
-        //UE_LOG(LogTemp, Warning, TEXT("Tank Controlled by player?: %s"), *ControlledTank->GetName());
-        auto AimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+        auto AimingComp = TankPawn->FindComponentByClass<UTankAimingComponent>();
         FoundAimingComponent(AimingComp);
     }
 }
@@ -33,12 +31,6 @@ void ABaseTankPlayerController::Tick(float DeltaTime)
     //UE_LOG(LogTemp, Warning, TEXT("Ticking PLAYER"));
 }
 
-ATank *ABaseTankPlayerController::GetControlledTank() const
-{
-    //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::GetControlledTank"));
-    return Cast<ATank>(GetPawn());
-}
-
 void ABaseTankPlayerController::AimTowardCrosshair()
 {
     //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::AimTowardCrosshair"));
@@ -46,10 +38,10 @@ void ABaseTankPlayerController::AimTowardCrosshair()
     if (GetSightRayHitLocation(OutHitLocation))
     {
         //UE_LOG(LogTemp, Warning, TEXT("    Look Location: %s"), *OutHitLocation.ToString());
-        auto ControlledTank = GetControlledTank();
-        if (ensure(ControlledTank && ControlledTank->FindComponentByClass<UTankAimingComponent>()))
+        auto TankPawn = GetPawn();
+        if (ensure(TankPawn && TankPawn->FindComponentByClass<UTankAimingComponent>()))
         {
-            ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
+            TankPawn->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
         }
     }
 }
