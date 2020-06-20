@@ -25,6 +25,10 @@ public:
 	float TrackMaxDrivingForce = 400000.f;
 
 private:
+	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime,enum ELevelTick TickType,FActorComponentTickFunction * ThisTickFunction) override;
+	// Private mandatory for this to work as its called as delegate for ou onHit event!
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 };
