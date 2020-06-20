@@ -41,22 +41,27 @@ protected:
 	EFiringStatus FiringStatus = EFiringStatus::Aiming;
 
 private:
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime,enum ELevelTick TickType,FActorComponentTickFunction * ThisTickFunction) override;
+	void MoveBarrelToward(FVector AimDirectionLocal);
+	void MoveTurretToward(FVector AimDirectionLocal);
+	bool IsBarrelMoving();
+	void LaunchProjectile(FVector HitLocation);
+
 	UTankBarrel *Barrel = nullptr;
 	UTankTurret *Turret = nullptr;
-
-	void MoveBarrelToward(FVector AimDirection);
-	void MoveTurretToward(FVector AimDirection);
 
 	// EditDefaultsOnly doesnt let instance modify occur, only through BP!
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3.f;
 	double LastFireTime = 0;
+	FVector AimDirection;
 
 	// If we just pust UClass* insead of TSubClass we would have a too big class list in BP UI.
 	UPROPERTY(EditAnywhere, Category = "Firing")
 	TSubclassOf<AProjectile> ProjectileBlueprint; // Doc: https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/TSubclassOf/index.html
-	void LaunchProjectile(FVector HitLocation, FVector &OutAimDirection);
 	UPROPERTY(EditAnywhere, Category = "Firing")
 	float LaunchSpeed = 4000.f;
 	//float LaunchSpeed = 10000.f; // 1000 m/s A CONFIRMER
+
 };
