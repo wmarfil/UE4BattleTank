@@ -173,7 +173,7 @@ void UTankAimingComponent::MoveTurretToward(FVector AimDirectionLocal)
 	auto DeltaRotator = AimAsRotator - TurretRotator;
 	float AngleToGo = DeltaRotator.Yaw;
 	//UE_LOG(LogTemp, Warning, TEXT("%f: DeltaYAW between Turret and Aim direction: %f"),GetWorld()->GetTimeSeconds(), AngleToGo);
-	if(AngleToGo > 180.f )
+	if(FMath::Abs(AngleToGo) > 180.f )
 	{
 		AngleToGo = -AngleToGo; // Take the other way around
 	}
