@@ -34,10 +34,11 @@ void ABaseTankPlayerController::Tick(float DeltaTime)
 void ABaseTankPlayerController::AimTowardCrosshair()
 {
     //UE_LOG(LogTemp, Warning, TEXT("In ABaseTankPlayerController::AimTowardCrosshair"));
-    FVector OutHitLocation; // Out P.
-    if (GetSightRayHitLocation(OutHitLocation))
+    FVector OutHitLocation;
+    auto bHasFoundAim = GetSightRayHitLocation(OutHitLocation);
+    //UE_LOG(LogTemp, Warning, TEXT("%f: FOUND AIM? %d :  Look Location: %s"), GetWorld()->GetTimeSeconds() , bHasFoundAim, *OutHitLocation.ToString());
+    if (bHasFoundAim)
     {
-        //UE_LOG(LogTemp, Warning, TEXT("    Look Location: %s"), *OutHitLocation.ToString());
         auto TankPawn = GetPawn();
         if (ensure(TankPawn && TankPawn->FindComponentByClass<UTankAimingComponent>()))
         {

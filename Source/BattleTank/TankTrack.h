@@ -19,6 +19,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetThrottle(float Throttle);
+
 	
 	// Max force per track, In Newton  => 1g acceleration for 40tons tank. Note that we will have to multiply by 100 when using it since its N for cm instead of m.
 	UPROPERTY(EditDefaultsOnly, Category = "Driving")
@@ -26,9 +27,11 @@ public:
 
 private:
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime,enum ELevelTick TickType,FActorComponentTickFunction * ThisTickFunction) override;
+	void DriveTrack();
+	void CancelSidewayForces();
 	// Private mandatory for this to work as its called as delegate for ou onHit event!
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	float CurrentThrottle = 0;
 };

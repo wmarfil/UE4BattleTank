@@ -137,10 +137,7 @@ void UTankAimingComponent::LaunchProjectile(FVector HitLocation)
 
 void UTankAimingComponent::MoveBarrelToward(FVector AimDirectionLocal)
 {
-	if (!ensure(Barrel && Turret))
-	{
-		return;
-	}
+	if (!ensure(Barrel)){return;}
 
 	// Work out difference between current barrel rotation and aim direction,
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
@@ -150,19 +147,24 @@ void UTankAimingComponent::MoveBarrelToward(FVector AimDirectionLocal)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	// UE_LOG(LogTemp, Warning, TEXT("Barrel DeltaRotator: %s"), *DeltaRotator.ToString());
 	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->MutateAzimuth(DeltaRotator.Yaw);
 }
 
 void UTankAimingComponent::MoveTurretToward(FVector AimDirectionLocal)
 {
+	if (!ensure(Turret)){return;}
 	// Work out difference between current turret rotation and aim direction,
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirectionLocal.Rotation();
 	//UE_LOG(LogTemp, Warning, TEXT("Turret TurretRotator (fw v.): %s"), *TurretRotator.ToString());
 	//UE_LOG(LogTemp, Warning, TEXT("Turret AimAsRotator: %s"), *AimAsRotator.ToString());
 	auto DeltaRotator = AimAsRotator - TurretRotator;
-	//UE_LOG(LogTemp, Warning, TEXT("Turret DeltaRotator: %s"), *DeltaRotator.ToString());
-	Turret->MutateAzimuth(DeltaRotator.Yaw);
+	float AngleToGo = DeltaRotator.Yaw;
+	//UE_LOG(LogTemp, Warning, TEXT("%f: DeltaYAW between Turret and Aim direction: %f"),GetWorld()->GetTimeSeconds(), AngleToGo);
+	if(AngleToGo > 180.f )
+	{
+		AngleToGo = -AngleToGo; // Take the other way around
+	}
+	Turret->MutateAzimuth(AngleToGo);
 }
 
 

@@ -5,7 +5,7 @@
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankTrack::BeginPlay()
@@ -18,15 +18,21 @@ void UTankTrack::BeginPlay()
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-    UE_LOG(LogTemp, Warning, TEXT("HITTING THE TRACK AINT YA"));
+    // UE_LOG(LogTemp, Warning, TEXT("HITTING THE TRACK AINT YA"));
+    DriveTrack();
+	CancelSidewayForces();
+    CurrentThrottle = 0;
 }
 
-// Cancel Sideway force
-void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+void UTankTrack::SetThrottle(float Throttle)
 {
-    // Note here that we dont call Super::TickComponent, because our blueprint doesnt need it. (basicly this would allow the BP to call its own tick event in graph section)
+    // Clamping manage the multiple input a time glitch that makes you faster and other things like right and forward at the right time
+    CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle , -1, 1);
+}
 
-	// Calculate the slippage speed 
+void UTankTrack::CancelSidewayForces()
+{
+    // Calculate the slippage speed 
     // Work out the required acceleration this frame to correct 
     // Apply sideway force to counteract our undesired sidewaz force
     
@@ -35,7 +41,7 @@ void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActor
     auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
 
     // What is the required acceleration this frame to correct ?
-    auto CorrectionAccel  = -SlippageSpeed / DeltaTime * GetRightVector();
+    auto CorrectionAccel  = -SlippageSpeed / GetWorld()->GetDeltaSeconds() * GetRightVector();
 
     // Cast to StaticMeshComp to get the mass of the tank.
     auto TankRootComp =  Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
@@ -43,17 +49,18 @@ void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActor
     // Our tank is 40t => we need F = 40t * CorrectionAccel
     auto CorrectionForce = (TankRootComp->GetMass() * CorrectionAccel) / 2 ;
     TankRootComp->AddForce(CorrectionForce);
-
 }
 
-void UTankTrack::SetThrottle(float Throttle)
+// Called when track hit the ground.
+void UTankTrack::DriveTrack()
 {
     auto Name = GetName();
     // UE_LOG(LogTemp, Warning, TEXT("Throttle set to %f for %s"), Throttle, *Name);
 
-    // TODO: Clamp up throttle to not allow player to over drive. Multiplied by 100 since we got Newtons/100
-    auto ForceApplied = GetForwardVector() * TrackMaxDrivingForce*100 * Throttle;
+    // TODO: Multiplied by 100 since we got Newtons/100
+    auto ForceApplied = GetForwardVector() * TrackMaxDrivingForce*100 * CurrentThrottle;
     auto ForceLocation = GetComponentLocation();
     auto RootComp =  Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
     RootComp->AddForceAtLocation(ForceApplied, ForceLocation);
 }
+
