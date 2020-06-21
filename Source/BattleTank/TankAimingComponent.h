@@ -11,7 +11,8 @@ enum class EFiringStatus : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 // Forward Declaration !
@@ -37,6 +38,8 @@ public:
 	void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
 
 	EFiringStatus GetFiringStatus() const;
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	int GetAmmoCount() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
@@ -66,4 +69,5 @@ private:
 	float LaunchSpeed = 4000.f;
 	//float LaunchSpeed = 10000.f; // 1000 m/s A CONFIRMER
 
+	int AmmoCount = 2;
 };
