@@ -167,7 +167,10 @@ void UTankAimingComponent::MoveTurretToward(FVector AimDirectionLocal)
 	Turret->MutateAzimuth(AngleToGo);
 }
 
-
+EFiringStatus UTankAimingComponent::GetFiringStatus() const
+{
+	return FiringStatus;
+}
 
 
 
