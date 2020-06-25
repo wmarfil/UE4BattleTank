@@ -39,7 +39,7 @@ public:
 
 	EFiringStatus GetFiringStatus() const;
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	int GetAmmoCount() const;
+	int32 GetAmmoCount() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
@@ -69,5 +69,6 @@ private:
 	float LaunchSpeed = 4000.f;
 	//float LaunchSpeed = 10000.f; // 1000 m/s A CONFIRMER
 
-	int AmmoCount = 2;
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	int32 AmmoCount = 20;
 };
