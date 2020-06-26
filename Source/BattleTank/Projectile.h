@@ -8,6 +8,7 @@
 
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
+class URadialForceComponent;
 
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
@@ -29,12 +30,20 @@ private:
 	UParticleSystemComponent* LaunchBlast = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Firing")
 	UParticleSystemComponent* ImpactBlast = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Firing")
+	URadialForceComponent* RadialForce = nullptr;
+
+	// time(s) before the projectile gets de allocated.
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DestroyDelay = 10.f;
+
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
 	// OnHit's delegate.
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	
+	void OnTimerExpire();
 
 public:	
 	void LaunchProjectile(float Speed);
