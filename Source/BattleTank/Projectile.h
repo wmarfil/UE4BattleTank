@@ -33,6 +33,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Firing")
 	URadialForceComponent* RadialForce = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float ProjectileDamage = 20.f;
+
 	// time(s) before the projectile gets de allocated.
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DestroyDelay = 10.f;

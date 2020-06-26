@@ -3,6 +3,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
 
 AProjectile::AProjectile()
@@ -47,7 +48,7 @@ void AProjectile::LaunchProjectile(float Speed)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Your shell touched something"));
+    // UE_LOG(LogTemp, Warning, TEXT("Your shell touched something"));
     LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	RadialForce->FireImpulse();
@@ -55,6 +56,17 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
 
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		RadialForce->Radius, // for consistancy
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // empty array, thus damaging all actor.
+	);
+	// UE_LOG(LogTemp, Warning, TEXT(" Damage amount: %f - DamageCauser(actor): %s"), DamageAmount, *DamageCauser->GetName());
+
+	// De allocation management:
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(
 		Timer,
