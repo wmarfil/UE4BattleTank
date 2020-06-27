@@ -30,6 +30,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 1000000.f;
 
+	void SetPawn(APawn* InPawn) override;
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimingCompRef);
@@ -38,5 +40,9 @@ private:
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& OutWorldDirection) const;
 	bool GetLookVectorHitLocation(FVector WorldDirection, FVector &HitLocation) const;
+	
+	// our Observable pattern logic to execute upon receiving. Must be UFUNCTION
+	UFUNCTION()
+	void OnTankDeath();
 
 };

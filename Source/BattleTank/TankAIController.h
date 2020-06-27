@@ -21,4 +21,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 6000.f;
+
+	void SetPawn(APawn* InPawn) override;
+
+private:
+	UFUNCTION()
+	void OnTankDeath();
+
 };

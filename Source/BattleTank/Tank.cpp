@@ -16,6 +16,7 @@ void ATank::BeginPlay()
 {
 	// UE_LOG(LogTemp, Warning, TEXT("brobro: %s : TANK BeginPlay"), *GetName());
 	Super::BeginPlay(); // Very much needed for the Tank BP to launch its own BeginPlay in Eventgraph !!!!
+	CurrentHealth = StartingHealth;
 }
 
 float ATank::GetCurrentHealth() const
@@ -31,23 +32,24 @@ float ATank::TakeDamage
     AActor * DamageCauser
 )
 {
-	UE_LOG(LogTemp, Warning, TEXT("Damage amount: %f "), DamageAmount);
+	//UE_LOG(LogTemp, Warning, TEXT("Damage amount: %f "), DamageAmount);
 	if(DamageCauser)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DamageCauser(actor): %s"), DamageAmount, *DamageCauser->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("DamageCauser(actor): %s"), DamageAmount, *DamageCauser->GetName());
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NULL reference Damage causer!"));
+		//UE_LOG(LogTemp, Warning, TEXT("NULL reference Damage causer!"));
 	}
 
 	int32 DamagePoints = FPlatformMath::RoundToInt(DamageAmount);
 	auto DamageToApply = FMath::Clamp<int32>(DamagePoints, 0, CurrentHealth);
-	UE_LOG(LogTemp, Warning, TEXT("DamageToApply: %d "), DamageToApply);
+	//UE_LOG(LogTemp, Warning, TEXT("DamageToApply: %d "), DamageToApply);
 	CurrentHealth -= DamageToApply;
 	if(CurrentHealth <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("DEAD"));
+		OnDeath.Broadcast();
 	}
 	return DamageToApply;
 }

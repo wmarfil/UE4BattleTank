@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Actor.h" // findcomponentnbyclass
 #include "BaseTankPlayerController.h"
+#include "Tank.h"
 #include "TankAimingComponent.h"
 
 void ABaseTankPlayerController::BeginPlay()
@@ -24,11 +25,28 @@ void ABaseTankPlayerController::BeginPlay()
     }
 }
 
+void ABaseTankPlayerController::SetPawn(APawn* InPawn)
+{
+    Super::SetPawn(InPawn);
+    if(InPawn)
+    {
+        auto PossessedTank = Cast<ATank>(InPawn);
+        if(!ensure(PossessedTank)){return;}
+        PossessedTank->OnDeath.AddUniqueDynamic(this, &ABaseTankPlayerController::OnTankDeath);
+    }
+}
+
 void ABaseTankPlayerController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     AimTowardCrosshair();
     //UE_LOG(LogTemp, Warning, TEXT("Ticking PLAYER"));
+}
+
+void ABaseTankPlayerController::OnTankDeath()
+{
+    UE_LOG(LogTemp, Warning, TEXT("PlayerController receives tank died !"));
+    StartSpectatingOnly();
 }
 
 void ABaseTankPlayerController::AimTowardCrosshair()
@@ -40,9 +58,13 @@ void ABaseTankPlayerController::AimTowardCrosshair()
     if (bHasFoundAim)
     {
         auto TankPawn = GetPawn();
-        if (ensure(TankPawn && TankPawn->FindComponentByClass<UTankAimingComponent>()))
+        if (TankPawn)
         {
-            TankPawn->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
+            auto TankAimingComp = TankPawn->FindComponentByClass<UTankAimingComponent>();
+            if(TankAimingComp)
+            {
+                TankPawn->FindComponentByClass<UTankAimingComponent>()->AimAt(OutHitLocation);
+            }
         }
     }
 }

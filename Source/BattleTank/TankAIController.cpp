@@ -3,36 +3,36 @@
 #include "TankAIController.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h" // findcomponentnbyclass
+#include "GameFramework/Pawn.h" // for detach pawn
 #include "TankAimingComponent.h"
 #include "Tank.h"
 
 void ATankAIController::BeginPlay()
 {
     Super::BeginPlay();
-    //UE_LOG(LogTemp, Warning, TEXT("In ATankAIController::BeginPlay"));
+}
 
-    // auto ControlledTank = GetControlledTank();
-    // if (!ControlledTank)
-    // {
-    //     UE_LOG(LogTemp, Error, TEXT("AI Controller not possessing a tank..."));
-    // }
-    // else
-    // {
-    //     UE_LOG(LogTemp, Warning, TEXT("Tank Controlled by AI ?: %s"), *ControlledTank->GetName());
-    // }
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+    Super::SetPawn(InPawn);
+    if(InPawn)
+    {
+        auto PossessedTank = Cast<ATank>(InPawn);
+        if(!ensure(PossessedTank)){return;}
+        PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+    }
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    //UE_LOG(LogTemp, Warning, TEXT("Ticking AI"));
 
     auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
     auto ControlledTank = Cast<ATank>(GetPawn());
-    if (ensure(PlayerTank && ControlledTank))
+    if (PlayerTank && ControlledTank)
     {
         auto AimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
-        if (ensure(AimingComp))
+        if (AimingComp)
         {
             AimingComp->AimAt(PlayerTank->GetActorLocation());
             if(AimingComp->GetFiringStatus() == EFiringStatus::Locked)
@@ -44,6 +44,12 @@ void ATankAIController::Tick(float DeltaTime)
     }
     else
     {
-        UE_LOG(LogTemp, Error, TEXT("PlayerController Pawn not found..."));
+        UE_LOG(LogTemp, Warning, TEXT("PlayerController Pawn not found..."));
     }
+}
+
+void ATankAIController::OnTankDeath()
+{
+    UE_LOG(LogTemp, Warning, TEXT("AIController receives tank died !"));
+    GetPawn()->DetachFromControllerPendingDestroy();
 }
