@@ -127,11 +127,12 @@ bool ABaseTankPlayerController::GetLookVectorHitLocation(FVector LookDirection, 
     // 	5.f
     // );
 
+    // For the ECollisionChannel, care as ECollisionChannel:ECC_Visibility will also hit UI 
     if (GetWorld()->LineTraceSingleByChannel(
-            HitResult,
-            Start,
-            End,
-            ECollisionChannel::ECC_Visibility))
+        HitResult,
+        Start,
+        End,
+        ECollisionChannel::ECC_Camera))
     {
         HitLocation = HitResult.Location;
         return true;
