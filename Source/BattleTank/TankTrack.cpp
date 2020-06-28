@@ -101,7 +101,7 @@ TArray<ASprungWheel*> UTankTrack::GetWheels() const
         if(!SprungWheel) continue;
         
         FinalRes.Add(SprungWheel);
-        UE_LOG(LogTemp, Warning, TEXT("Impec"));
+        // UE_LOG(LogTemp, Warning, TEXT("Impec"));
     }
 
     return FinalRes;

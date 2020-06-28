@@ -20,7 +20,7 @@ void USpawnPoint::BeginPlay()
 		SpawningActor,
 		GetComponentTransform()
 	);
-	UE_LOG(LogTemp, Warning, TEXT("After spawn"));
+	// UE_LOG(LogTemp, Warning, TEXT("After spawn"));
 	if(!SpawnedActor) return;
 
 	// for second parameter: as we specified the world transform in SpawnActorDeferred via GetComponentTransform()

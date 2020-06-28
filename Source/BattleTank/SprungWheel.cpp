@@ -35,7 +35,7 @@ void ASprungWheel::BeginPlay()
 	auto AttachedParentActor = GetAttachParentActor();
 	if(AttachedParentActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Setting up constraints to parent actor: %s"), *AttachedParentActor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("Setting up constraints to parent actor: %s"), *AttachedParentActor->GetName());
 		// We do not need bones names in our example this using NAME_None.
 		auto BodyRoot = Cast<UPrimitiveComponent>(AttachedParentActor->GetRootComponent());
 		if(!BodyRoot) return;
@@ -54,7 +54,7 @@ void ASprungWheel::BeginPlay()
 			WheelMesh,
 			NAME_None 
 		);
-		UE_LOG(LogTemp, Warning, TEXT("Finished setting up constraints to parent actor: %s"), *AttachedParentActor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("Finished setting up constraints to parent actor: %s"), *AttachedParentActor->GetName());
 	}
 	else
 	{
