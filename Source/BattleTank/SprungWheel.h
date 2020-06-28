@@ -19,6 +19,8 @@ public:
 	ASprungWheel();
 	virtual void Tick(float DeltaTime) override;
 
+	void AddDrivingForce(float ForceMagnitude);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -35,6 +37,14 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
+
+	// NEVER EVER FORGET the UFUNCTIOn when creating a function for multicast delegate to call. + private as well !!
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	void ApplyForce();
+
+	float TotalForceMagnitudeThisFrame = 0.f;
 
 	//SprungWheel_BP
 

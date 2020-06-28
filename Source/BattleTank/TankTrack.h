@@ -27,11 +27,15 @@ public:
 
 private:
 	virtual void BeginPlay() override;
-	void DriveTrack();
-	void CancelSidewayForces();
+	void DriveTrack(float ThrottleToApply);
+	
+	// OLD: before wheels constraint use.
+	// UFUNCTION()
 	// Private mandatory for this to work as its called as delegate for ou onHit event!
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	// void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	// void CancelSidewayForces();
+	// float CurrentThrottle = 0;
 
-	float CurrentThrottle = 0;
+	// Using sprung wheels now, to emulate our suspension and all
+	TArray<class ASprungWheel*> GetWheels() const;
 };

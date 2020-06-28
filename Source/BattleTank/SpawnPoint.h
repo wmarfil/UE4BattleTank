@@ -16,11 +16,16 @@ public:
 	USpawnPoint();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	AActor* GetSpawnedActor() const;
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Answers "What kind of Actor i.e. our SprungWheel here"
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AActor> SpawningActor;
+
+	AActor* SpawnedActor = nullptr;
 
 };
