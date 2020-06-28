@@ -23,8 +23,6 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Setup")
-	UStaticMeshComponent* SupportMesh = nullptr;
-	UPROPERTY(EditAnywhere, Category = "Setup")
 	UStaticMeshComponent* WheelMesh = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	UPhysicsConstraintComponent* PhysicsConstraintComp = nullptr;
