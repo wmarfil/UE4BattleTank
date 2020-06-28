@@ -13,6 +13,7 @@ USpawnPoint::USpawnPoint()
 void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	// This allows to not trigger the BP and construction script of the spawned actor until the caller, ie here, we order it with UGameplayStatics::FinishSpawningActor
 	auto NewActor = GetWorld()->SpawnActorDeferred<AActor>(
 		SpawningActor,
