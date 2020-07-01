@@ -68,6 +68,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	if (ensure(Barrel && Turret))
 	{
+		// TODO: Better rename that, confusing.
 		LaunchProjectile(HitLocation);
 	}
 	else
@@ -102,8 +103,14 @@ void UTankAimingComponent::LaunchProjectile(FVector HitLocation)
 {
 	// Params:
 	// 1: Getworld I guess
-	// 2: TossVelocity is actually the direction vector... the lenght will be the speed
-	// 3:
+	// 2: TossVelocity is our Out parameter speed vector... its magnitude will be the speed, but what interest us here is its direction.
+	// 3: startlocation 
+	// 4: endlocation
+	// 5: launchspeed
+	// 6: bhigharc
+	// 7: collisionRadius
+	// 8: override grav z
+	// 9: TraceOPtions: by default is trace full path, which will provoke no aim solution if there is a collider with the line. We want to be able to aim no matter what so we need to not trace
 
 	// SuggestProjectileVelocity
 	// (
@@ -137,13 +144,16 @@ void UTankAimingComponent::LaunchProjectile(FVector HitLocation)
 	if (bHaveAimSolution)
 	{
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
-		//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> Aim solution Found !"), GetWorld()->GetTimeSeconds());
+		UE_LOG(LogTemp, Warning,
+			TEXT("%f: UTankAimingComponent::LaunchProjectile ==> Aim solution Found ! useless but see OutLaunchVelocity magnitude: %f "),
+			GetWorld()->GetTimeSeconds()
+			OutLaunchVelocity.Size()
+		);
 		MoveBarrelToward(AimDirection);
 		MoveTurretToward(AimDirection);
 	}
 	else
 	{
-		// UE_LOG(LogTemp, Warning, TEXT("%s ======> NO AIM SOLUTION"), *GetOwner()->GetName());
 		//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
 	}
 }
