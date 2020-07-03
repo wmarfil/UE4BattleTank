@@ -51,7 +51,6 @@ private:
 	void MoveBarrelToward(FVector AimDirectionLocal);
 	void MoveTurretToward(FVector AimDirectionLocal);
 	bool IsBarrelMoving();
-	void LaunchProjectile(FVector HitLocation);
 
 	UTankBarrel *Barrel = nullptr;
 	UTankTurret *Turret = nullptr;

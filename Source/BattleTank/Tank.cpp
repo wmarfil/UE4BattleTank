@@ -32,7 +32,7 @@ float ATank::TakeDamage
     AActor * DamageCauser
 )
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Damage amount: %f "), DamageAmount);
+	UE_LOG(LogTemp, Warning, TEXT("%s Hit !"), *GetName());
 	if(DamageCauser)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("DamageCauser(actor): %s"), DamageAmount, *DamageCauser->GetName());

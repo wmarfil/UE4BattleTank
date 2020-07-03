@@ -56,7 +56,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
 
-	UGameplayStatics::ApplyRadialDamage(
+	bool IsHit = UGameplayStatics::ApplyRadialDamage(
 		this,
 		ProjectileDamage,
 		GetActorLocation(),
@@ -64,7 +64,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 		UDamageType::StaticClass(),
 		TArray<AActor*>() // empty array, thus damaging all actor.
 	);
-	// UE_LOG(LogTemp, Warning, TEXT(" Damage amount: %f - DamageCauser(actor): %s"), DamageAmount, *DamageCauser->GetName());
+	// UE_LOG(LogTemp, Warning, TEXT(" Alors radius hit? : %d"), IsHit);
 
 	// De allocation management:
 	FTimerHandle Timer;

@@ -68,8 +68,61 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	if (ensure(Barrel && Turret))
 	{
-		// TODO: Better rename that, confusing.
-		LaunchProjectile(HitLocation);
+		// Params:
+		// 1: Getworld I guess
+		// 2: TossVelocity is our Out parameter speed vector... its magnitude will be the speed, but what interest us here is its direction.
+		// 3: startlocation 
+		// 4: endlocation
+		// 5: launchspeed
+		// 6: bhigharc
+		// 7: collisionRadius
+		// 8: override grav z
+		// 9: TraceOPtions: by default is trace full path, which will provoke no aim solution if there is a collider with the line. We want to be able to aim no matter what so we need to not trace
+
+		// SuggestProjectileVelocity
+		// (
+		// 	const UObject * WorldContextObject,
+		// 	FVector & TossVelocity,
+		// 	FVector StartLocation,
+		// 	FVector EndLocation,
+		// 	float TossSpeed,
+		// 	bool bHighArc,
+		// 	float CollisionRadius,
+		// 	float OverrideGravityZ,
+		// 	ESuggestProjVelocityTraceOption::Type TraceOption,
+		// 	const FCollisionResponseParams & ResponseParam,
+		// 	const TArray < AActor * > & ActorsToIgnore,
+		// 	bool bDrawDebug
+		// )
+		if (!ensure(Barrel && Turret)){return;}
+
+		FVector OutLaunchVelocity(0);
+		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+		bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+			this,
+			OutLaunchVelocity,
+			StartLocation,
+			HitLocation,
+			LaunchSpeed,
+			false,
+			0,
+			0,
+			ESuggestProjVelocityTraceOption::DoNotTrace);
+		if (bHaveAimSolution)
+		{
+			AimDirection = OutLaunchVelocity.GetSafeNormal();
+			// UE_LOG(LogTemp, Warning,
+			// 	TEXT("%f: UTankAimingComponent::Aim ==> Aim solution Found ! useless but see OutLaunchVelocity magnitude: %f "),
+			// 	GetWorld()->GetTimeSeconds(),
+			// 	OutLaunchVelocity.Size()
+			// );
+			MoveBarrelToward(AimDirection);
+			MoveTurretToward(AimDirection);
+		}
+		else
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::Aim ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
+		}
 	}
 	else
 	{
@@ -97,65 +150,6 @@ void UTankAimingComponent::Fire()
 int32 UTankAimingComponent::GetAmmoCount() const
 {
 	return AmmoCount;
-}
-
-void UTankAimingComponent::LaunchProjectile(FVector HitLocation)
-{
-	// Params:
-	// 1: Getworld I guess
-	// 2: TossVelocity is our Out parameter speed vector... its magnitude will be the speed, but what interest us here is its direction.
-	// 3: startlocation 
-	// 4: endlocation
-	// 5: launchspeed
-	// 6: bhigharc
-	// 7: collisionRadius
-	// 8: override grav z
-	// 9: TraceOPtions: by default is trace full path, which will provoke no aim solution if there is a collider with the line. We want to be able to aim no matter what so we need to not trace
-
-	// SuggestProjectileVelocity
-	// (
-	// 	const UObject * WorldContextObject,
-	// 	FVector & TossVelocity,
-	// 	FVector StartLocation,
-	// 	FVector EndLocation,
-	// 	float TossSpeed,
-	// 	bool bHighArc,
-	// 	float CollisionRadius,
-	// 	float OverrideGravityZ,
-	// 	ESuggestProjVelocityTraceOption::Type TraceOption,
-	// 	const FCollisionResponseParams & ResponseParam,
-	// 	const TArray < AActor * > & ActorsToIgnore,
-	// 	bool bDrawDebug
-	// )
-	if (!ensure(Barrel && Turret)){return;}
-
-	FVector OutLaunchVelocity(0);
-	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
-		this,
-		OutLaunchVelocity,
-		StartLocation,
-		HitLocation,
-		LaunchSpeed,
-		false,
-		0,
-		0,
-		ESuggestProjVelocityTraceOption::DoNotTrace);
-	if (bHaveAimSolution)
-	{
-		AimDirection = OutLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning,
-			TEXT("%f: UTankAimingComponent::LaunchProjectile ==> Aim solution Found ! useless but see OutLaunchVelocity magnitude: %f "),
-			GetWorld()->GetTimeSeconds()
-			OutLaunchVelocity.Size()
-		);
-		MoveBarrelToward(AimDirection);
-		MoveTurretToward(AimDirection);
-	}
-	else
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("%f: UTankAimingComponent::LaunchProjectile ===> NO Aim solution !"), GetWorld()->GetTimeSeconds());
-	}
 }
 
 void UTankAimingComponent::MoveBarrelToward(FVector AimDirectionLocal)

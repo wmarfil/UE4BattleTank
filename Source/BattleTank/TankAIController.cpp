@@ -44,7 +44,7 @@ void ATankAIController::Tick(float DeltaTime)
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("PlayerController Pawn not found..."));
+        // UE_LOG(LogTemp, Warning, TEXT("PlayerController Pawn not found..."));
     }
 }
 

@@ -20,7 +20,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, Category = "Setup")
-	float AcceptanceRadius = 6000.f;
+	float AcceptanceRadius = 20000.f;
 
 	void SetPawn(APawn* InPawn) override;
 
